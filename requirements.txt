@@ -7,3 +7,6 @@ seaborn
 scikit-learn
 scipy
 statsmodels
+kaggle
+wordcloud
+nltk
