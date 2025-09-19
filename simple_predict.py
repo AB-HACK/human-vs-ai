@@ -92,7 +92,7 @@ def classify_with_confidence(text):
 
 # Example usage
 if __name__ == "__main__":
-    print("🤖 AI vs Human Essay Classifier")
+    print("AI vs Human Essay Classifier")
     print("=" * 40)
     
     # Test with sample texts
@@ -102,7 +102,7 @@ if __name__ == "__main__":
         "Artificial intelligence represents a paradigm shift in computational capabilities, enabling machines to process information and make decisions with unprecedented efficiency."
     ]
     
-    print("🧪 Testing with sample texts:")
+    print("Testing with sample texts:")
     print("-" * 40)
     
     for i, text in enumerate(sample_texts, 1):
@@ -112,15 +112,15 @@ if __name__ == "__main__":
         print()
     
     # Interactive mode
-    print("🚀 Interactive mode - Enter texts to classify:")
+    print("Interactive mode - Enter texts to classify:")
     print("(Type 'quit' to exit)")
     print("-" * 40)
     
     while True:
-        text = input("\n📝 Enter text: ").strip()
+        text = input("\n Enter text: ").strip()
         
         if text.lower() == 'quit':
-            print("👋 Goodbye!")
+            print("Goodbye!")
             break
         
         if not text:
@@ -134,5 +134,5 @@ if __name__ == "__main__":
             print(f"❌ {result['error']}")
             continue
         
-        print(f"🎯 Result: {result['prediction']}")
-        print(f"📊 Confidence: {result['confidence']}%")
+        print(f"Result: {result['prediction']}")
+        print(f"Confidence: {result['confidence']}%")

@@ -15,12 +15,12 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report, accuracy_score, confusion_matrix
 from wordcloud import WordCloud
 
-print("🤖 AI vs Human Essay Classifier")
-print("📊 Dataset: human-vs-ai-generated-essays/balanced_ai_human_prompts.csv")
+print("AI vs Human Essay Classifier")
+print("Dataset: human-vs-ai-generated-essays/balanced_ai_human_prompts.csv")
 print("=" * 60)
 
 # Download NLTK resources
-print("📥 Downloading NLTK resources...")
+print("Downloading NLTK resources...")
 nltk.download('stopwords', quiet=True)
 nltk.download('wordnet', quiet=True)
 nltk.download('omw-1.4', quiet=True)
@@ -43,25 +43,25 @@ def preprocess_text(text):
     return text
 
 # Load data from Kaggle dataset
-print("📂 Loading Kaggle dataset...")
+print("Loading Kaggle dataset...")
 try:
     data = pd.read_csv('/kaggle/input/human-vs-ai-generated-essays/balanced_ai_human_prompts.csv')
-    print(f"✅ Dataset loaded successfully! Shape: {data.shape}")
-    print(f"📋 Columns: {data.columns.tolist()}")
+    print(f"Dataset loaded successfully! Shape: {data.shape}")
+    print(f"Columns: {data.columns.tolist()}")
 except FileNotFoundError:
-    print("❌ Dataset not found! Make sure you're running this in Kaggle or have the dataset uploaded.")
-    print("🔗 Dataset URL: https://www.kaggle.com/datasets/navjotkaushal/human-vs-ai-generated-essays")
+    print("Dataset not found! Make sure you're running this in Kaggle or have the dataset uploaded.")
+    print("Dataset URL: https://www.kaggle.com/datasets/navjotkaushal/human-vs-ai-generated-essays")
     exit()
 
 # Ensure column names match your data
 data.columns = ['text', 'generated']
-print(f"📊 Class distribution:")
+print(f"Class distribution:")
 print(data['generated'].value_counts())
 print(f"   - 0: Human-written ({data[data['generated']==0].shape[0]} samples)")
 print(f"   - 1: AI-generated ({data[data['generated']==1].shape[0]} samples)")
 
 # 1. Visualize class distribution
-print("\n📈 Creating visualizations...")
+print("\n Creating visualizations...")
 plt.figure(figsize=(8, 5))
 sns.countplot(x='generated', data=data)
 plt.title('Class Distribution (0: Human, 1: AI)')
@@ -70,7 +70,7 @@ plt.ylabel('Count')
 plt.show()
 
 # Apply preprocessing
-print("🔧 Preprocessing text...")
+print("Preprocessing text...")
 data['cleaned_text'] = data['text'].apply(preprocess_text)
 
 # 2. Word Clouds
@@ -82,7 +82,7 @@ def plot_wordcloud(text, title):
     plt.axis('off')
     plt.show()
 
-print("☁️ Creating word clouds...")
+print("Creating word clouds...")
 plot_wordcloud(' '.join(data[data['generated'] == 0]['cleaned_text']), 'Human Texts')
 plot_wordcloud(' '.join(data[data['generated'] == 1]['cleaned_text']), 'AI Texts')
 
@@ -91,24 +91,24 @@ X = data['cleaned_text']
 y = data['generated']
 
 # Vectorize text
-print("🔢 Creating TF-IDF features...")
+print("Creating TF-IDF features...")
 vectorizer = TfidfVectorizer(max_features=5000, ngram_range=(1, 2), min_df=5, max_df=0.7)
 X_vectorized = vectorizer.fit_transform(X)
 
 # Split data
-print("✂️ Splitting data...")
+print("Splitting data...")
 X_train, X_test, y_train, y_test = train_test_split(X_vectorized, y, test_size=0.2, random_state=42)
 
 # Train model
-print("🚀 Training model...")
+print("Training model...")
 classifier = LogisticRegression(max_iter=1000, class_weight='balanced')
 classifier.fit(X_train, y_train)
 
 # Evaluate
-print("📊 Evaluating model...")
+print("Evaluating model...")
 y_pred = classifier.predict(X_test)
-print(f"🎯 Accuracy: {accuracy_score(y_test, y_pred):.4f}")
-print("\n📋 Classification Report:")
+print(f"Accuracy: {accuracy_score(y_test, y_pred):.4f}")
+print("\nClassification Report:")
 print(classification_report(y_test, y_pred))
 
 # 3. Confusion Matrix
@@ -153,7 +153,7 @@ with open('model.pkl', 'wb') as f:
     pickle.dump(classifier, f)
 with open('vectorizer.pkl', 'wb') as f:
     pickle.dump(vectorizer, f)
-print("✅ Model saved as 'model.pkl' and 'vectorizer.pkl'")
+print("Model saved as 'model.pkl' and 'vectorizer.pkl'")
 
 # Classification function
 def classify_text(text):
@@ -163,7 +163,7 @@ def classify_text(text):
     return "AI-generated" if prediction[0] == 1 else "Human-written"
 
 # Test with sample texts
-print("\n🧪 Testing with sample texts:")
+print("\nTesting with sample texts:")
 sample_texts = [
     "The economy, a complex system of production, distribution, and consumption of goods and services, plays a crucial role in shaping society.",
     "I love spending time with my family on weekends. We usually go to the park and have a picnic together.",
@@ -176,4 +176,4 @@ for i, text in enumerate(sample_texts, 1):
     print(f"   Text: {text[:60]}...")
     print()
 
-print("🎉 Analysis complete! Use 'simple_predict.py' to classify new texts.")
+print("Analysis complete! Use 'simple_predict.py' to classify new texts.")

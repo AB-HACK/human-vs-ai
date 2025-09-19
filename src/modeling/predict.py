@@ -110,7 +110,7 @@ def predict_multiple_texts(texts, model=None, vectorizer=None):
 
 def interactive_prediction():
     """Interactive command-line prediction interface"""
-    print("🤖 AI vs Human Essay Classifier")
+    print(" AI vs Human Essay Classifier")
     print("=" * 40)
     
     # Load model
@@ -118,35 +118,35 @@ def interactive_prediction():
     if model is None:
         return
     
-    print("✅ Model loaded successfully!")
+    print("Model loaded successfully!")
     print("\nEnter texts to classify (type 'quit' to exit):")
     print("-" * 40)
     
     while True:
-        text = input("\n📝 Enter text: ").strip()
+        text = input("\nEnter text: ").strip()
         
         if text.lower() == 'quit':
-            print("👋 Goodbye!")
+            print("Goodbye!")
             break
         
         if not text:
-            print("❌ Please enter some text.")
+            print("Please enter some text.")
             continue
         
         # Make prediction
         result = predict_single_text(text, model, vectorizer)
         
         if "error" in result:
-            print(f"❌ {result['error']}")
+            print(f" {result['error']}")
             continue
         
         # Display result
-        print(f"\n🎯 Result: {result['prediction']}")
-        print(f"📊 Confidence: {result['confidence']}%")
+        print(f"\n Result: {result['prediction']}")
+        print(f" Confidence: {result['confidence']}%")
         
         # Add some emoji based on prediction
         if result['prediction'] == "AI-generated":
-            print("🤖 This text appears to be AI-generated")
+            print(" This text appears to be AI-generated")
         else:
             print("👤 This text appears to be human-written")
 
@@ -160,7 +160,7 @@ if __name__ == "__main__":
         "The implementation of machine learning algorithms requires careful consideration of data preprocessing, feature engineering, and model validation techniques."
     ]
     
-    print("🧪 Testing with sample texts...")
+    print(" Testing with sample texts...")
     print("=" * 50)
     
     for i, text in enumerate(sample_texts, 1):
@@ -170,5 +170,5 @@ if __name__ == "__main__":
             print(f"   Result: {result['prediction']} ({result['confidence']}%)")
     
     print("\n" + "=" * 50)
-    print("🚀 Starting interactive mode...")
+    print(" Starting interactive mode...")
     interactive_prediction()
