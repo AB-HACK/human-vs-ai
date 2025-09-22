@@ -8,7 +8,7 @@ from .config import TEST_SIZE, RANDOM_STATE
 
 def load_data(file_path=None):
     """
-    Load dataset from CSV file. Defaults to Kaggle dataset path.
+    Load dataset from CSV file. Defaults to project folder.
     
     Args:
         file_path (str): Path to the CSV file. If None, uses Kaggle dataset path.

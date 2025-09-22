@@ -1,6 +1,6 @@
 """
 Complete AI vs Human essay classification script.
-This matches your working Kaggle notebook code.
+balanced_ai_human_prompts.csv
 """
 import pandas as pd
 import re
