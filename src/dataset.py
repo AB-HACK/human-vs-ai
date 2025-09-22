@@ -18,7 +18,7 @@ def load_data(file_path=None):
     """
     # Default to Kaggle dataset if no path provided
     if file_path is None:
-        file_path = '/kaggle/input/human-vs-ai-generated-essays/balanced_ai_human_prompts.csv'
+        file_path = 'balanced_ai_human_prompts.csv'
     
     data = pd.read_csv(file_path)
     

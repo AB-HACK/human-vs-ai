@@ -45,7 +45,7 @@ def preprocess_text(text):
 # Load data from Kaggle dataset
 print("Loading Kaggle dataset...")
 try:
-    data = pd.read_csv('/kaggle/input/human-vs-ai-generated-essays/balanced_ai_human_prompts.csv')
+    data = pd.read_csv('balanced_ai_human_prompts.csv')
     print(f"Dataset loaded successfully! Shape: {data.shape}")
     print(f"Columns: {data.columns.tolist()}")
 except FileNotFoundError:
