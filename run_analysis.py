@@ -38,7 +38,7 @@ def preprocess_text(text):
     return text
 
 # Load data from Kaggle dataset
-data = pd.read_csv('/kaggle/input/human-vs-ai-generated-essays/balanced_ai_human_prompts.csv')  
+data = pd.read_csv('balanced_ai_human_prompts.csv')  
 
 # Ensure column names match your data
 data.columns = ['text', 'generated']  
