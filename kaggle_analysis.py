@@ -16,8 +16,8 @@ from sklearn.metrics import classification_report, accuracy_score, confusion_mat
 from wordcloud import WordCloud
 
 print("AI vs Human Essay Classifier")
-print("Dataset: human-vs-ai-generated-essays/balanced_ai_human_prompts.csv")
 print("=" * 60)
+print("Dataset: human-vs-ai-generated-essays/balanced_ai_human_prompts.csv")
 
 # Download NLTK resources
 print("Downloading NLTK resources...")

@@ -1,129 +1,112 @@
-# AI vs Human Essay Classification
+# AI vs Human Essay Classification (Local Terminal)
 
-This project classifies essays as either AI-generated or human-written using machine learning techniques.
+Classify essays as AI-generated or human-written using a TF‑IDF + Logistic Regression pipeline. This README assumes you will run everything from your system terminal (Windows PowerShell/CMD or macOS/Linux shell).
 
-## 📊 Dataset
+## 1) Requirements
 
-**Kaggle Dataset**: [human-vs-ai-generated-essays](https://www.kaggle.com/datasets/navjotkaushal/human-vs-ai-generated-essays)
-- **File**: `balanced_ai_human_prompts.csv`
-- **Columns**: 
-  - `text`: Essay content
-  - `generated`: Label (0 = Human, 1 = AI)
-- **Size**: Balanced dataset with equal human and AI samples
+- Python 3.10+ recommended
+- Pip
 
-## 🚀 Quick Start
-
-### Option 1: Run Complete Analysis (Recommended)
-```python
-# In Kaggle or Colab
-exec(open('kaggle_analysis.py').read())
+Install Python packages:
+```bash
+pip install -r requirements.txt
 ```
 
-### Option 2: Use Modular Approach
-```python
-# Install dependencies
-!pip install -r requirements.txt
-
-# Train model
-from src.modeling.train import train_model
-model, vectorizer, X_test, y_test, y_pred = train_model()
-
-# Make predictions
-from simple_predict import classify_text
-result = classify_text("Your text here")
-print(result)
+If you use a virtual environment (optional):
+- Windows PowerShell
+```powershell
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+```
+- macOS/Linux
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
 ```
 
-## 📁 Project Structure
+## 2) Dataset
+
+Use the Kaggle dataset: `balanced_ai_human_prompts.csv` from `human-vs-ai-generated-essays`.
+
+Place the CSV anywhere on your machine. The scripts let you pass a path, or you can put it in the project root for convenience.
+
+Expected columns:
+- `text` — essay content
+- `generated` — label (0 = Human, 1 = AI)
+
+## 3) Train from Terminal
+
+Two options:
+
+- A) Run the ready-to-go analysis script (saves `model.pkl` and `vectorizer.pkl`):
+```bash
+python kaggle_analysis.py
+```
+
+- B) Run the modular training pipeline and pass your CSV path (recommended for flexibility):
+```bash
+python -c "from src.modeling.train import train_model, save_model; \
+model, vect, Xt, yt, yp = train_model(file_path='balanced_ai_human_prompts.csv'); \
+save_model(model, vect)"
+```
+
+Notes:
+- Replace `'balanced_ai_human_prompts.csv'` with the actual path if the CSV is elsewhere.
+- The training script will download NLTK data the first time it runs.
+
+## 4) Predict from Terminal
+
+After training, use either script below. Both expect `model.pkl` and `vectorizer.pkl` in the project root.
+
+- Simple, interactive prediction:
+```bash
+python simple_predict.py
+```
+
+- Programmatic single prediction:
+```bash
+python -c "from src.modeling.predict import predict_single_text; \
+print(predict_single_text('This is a sample essay about AI.'))"
+```
+
+## 5) Project Structure
 
 ```
 human-vs-ai/
-├── kaggle_analysis.py          # Complete analysis script (use this!)
-├── simple_predict.py           # Simple prediction script
-├── run_analysis.py             # Original working script
+├── kaggle_analysis.py          # End‑to‑end training + visuals (local CSV supported)
+├── run_analysis.py             # Original reference script
+├── simple_predict.py           # Interactive/simple prediction
 ├── requirements.txt            # Dependencies
-├── src/                        # Modular code
-│   ├── config.py              # Configuration & NLTK setup
-│   ├── dataset.py             # Data loading utilities
-│   ├── features.py            # Text preprocessing
-│   ├── plots.py               # Visualizations
+├── src/
+│   ├── config.py              # Settings + NLTK setup
+│   ├── dataset.py             # Data loading/splitting helpers
+│   ├── features.py            # Text preprocessing + TF‑IDF
+│   ├── plots.py               # Plots (class dist., confusion matrix, wordcloud)
 │   └── modeling/
-│       ├── train.py           # Training pipeline
-│       └── predict.py         # Prediction utilities
-└── README.md                  # This file
+│       ├── train.py           # Training pipeline + save
+│       └── predict.py         # Predict utils (single/batch/interactive)
+└── README.md
 ```
 
-## 🎯 Usage Examples
+## 6) Troubleshooting
 
-### 1. Complete Analysis
-```python
-# Run the full analysis with visualizations
-exec(open('kaggle_analysis.py').read())
+- No module named nltk:
+```bash
+pip install nltk
+```
+Then run once to download resources (done automatically by scripts). If blocked on Windows PowerShell execution policy, use CMD (`cmd.exe`) or set policy for your user:
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force
 ```
 
-### 2. Simple Prediction
-```python
-# After training, classify new texts
-from simple_predict import classify_text, classify_with_confidence
+- Different CSV column names:
+Update your CSV to have `text` and `generated`, or adjust the loader in `src/dataset.py`.
 
-# Simple classification
-result = classify_text("Your essay text here")
-print(result)  # "🤖 AI-generated" or "👤 Human-written"
+## 7) Notes
 
-# With confidence
-result = classify_with_confidence("Your essay text here")
-print(f"Result: {result['prediction']}")
-print(f"Confidence: {result['confidence']}%")
-```
+- Randomness is controlled via `RANDOM_STATE` in `src/config.py` for reproducible splits and model behavior.
+- The TF‑IDF configuration (bigrams, min/max df, max features) is set in `src/features.py`.
 
-### 3. Interactive Prediction
-```python
-# Run interactive mode
-exec(open('simple_predict.py').read())
-```
-
-## 📈 What the Analysis Includes
-
-1. **Data Loading**: Loads Kaggle dataset automatically
-2. **Visualizations**: 
-   - Class distribution plot
-   - Word clouds for human vs AI texts
-   - Confusion matrix
-   - Feature importance plots
-3. **Model Training**: Logistic Regression with TF-IDF features
-4. **Evaluation**: Accuracy, classification report, confusion matrix
-5. **Prediction**: Ready-to-use classification functions
-
-## 🔧 Technical Details
-
-- **Preprocessing**: Text cleaning, lemmatization, stopword removal
-- **Features**: TF-IDF with unigrams and bigrams (5000 features)
-- **Model**: Logistic Regression with balanced class weights
-- **Evaluation**: 80/20 train-test split with stratification
-
-## 📦 Dependencies
-
-All dependencies are in `requirements.txt`:
-- pandas, numpy, matplotlib, seaborn
-- scikit-learn, scipy, statsmodels
-- nltk, wordcloud
-- kaggle (for dataset access)
-
-## 🎉 Results
-
-The model typically achieves:
-- **Accuracy**: 85-95% on test set
-- **Features**: Identifies key linguistic patterns
-- **Visualizations**: Clear insights into human vs AI writing patterns
-
-## 💡 Tips
-
-1. **Use `kaggle_analysis.py`** for the complete experience
-2. **Run in Kaggle** for direct dataset access
-3. **Use `simple_predict.py`** for quick predictions
-4. **Check the visualizations** to understand model behavior
-
-## 🔗 Links
-
-- **Dataset**: https://www.kaggle.com/datasets/navjotkaushal/human-vs-ai-generated-essays
-- **Kaggle Notebook**: Upload and run `kaggle_analysis.py`
+All commands above are intended to be run from your system terminal inside the project directory.
