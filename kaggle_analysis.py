@@ -1,6 +1,6 @@
 """
 Kaggle AI vs Human Essay Classification
-Dataset: human-vs-ai-generated-essays/balanced_ai_human_prompts.csv
+balanced_ai_human_prompts.csv
 """
 import pandas as pd
 import re
@@ -16,8 +16,8 @@ from sklearn.metrics import classification_report, accuracy_score, confusion_mat
 from wordcloud import WordCloud
 
 print("AI vs Human Essay Classifier")
-print("Dataset: human-vs-ai-generated-essays/balanced_ai_human_prompts.csv")
 print("=" * 60)
+print("Dataset: human-vs-ai-generated-essays/balanced_ai_human_prompts.csv")
 
 # Download NLTK resources
 print("Downloading NLTK resources...")
@@ -147,7 +147,7 @@ def plot_feature_importance(clf, vectorizer, top_n=20):
 plot_feature_importance(classifier, vectorizer)
 
 # Save model for prediction
-print("💾 Saving model...")
+print("Saving model...")
 import pickle
 with open('model.pkl', 'wb') as f:
     pickle.dump(classifier, f)
