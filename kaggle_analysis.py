@@ -12,7 +12,7 @@ from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import classification_report, accuracy_score, confusion_matrix
+from sklearn.metrics import classification_report, accuracy_score, confusion_matrix, roc_auc_score
 from wordcloud import WordCloud
 
 print("AI vs Human Essay Classifier")
@@ -107,9 +107,23 @@ classifier.fit(X_train, y_train)
 # Evaluate
 print("Evaluating model...")
 y_pred = classifier.predict(X_test)
+y_proba = classifier.predict_proba(X_test)[:, 1]
 print(f"Accuracy: {accuracy_score(y_test, y_pred):.4f}")
-print("\nClassification Report:")
-print(classification_report(y_test, y_pred))
+print("\nClassification Report (per-class precision/recall/f1):")
+print(classification_report(y_test, y_pred, target_names=["Human", "AI"]))
+
+# ROC / AUC
+try:
+    from src.plots import plot_roc_curve
+    auc_value = plot_roc_curve(y_test, y_proba, title='ROC Curve - Logistic Regression (TF-IDF)')
+    print(f"AUC: {auc_value:.4f}")
+except Exception as e:
+    # Fallback AUC calculation without plot if import issues
+    try:
+        auc_value = roc_auc_score(y_test, y_proba)
+        print(f"AUC: {auc_value:.4f}")
+    except Exception as _:
+        pass
 
 # 3. Confusion Matrix
 def plot_confusion_matrix(y_true, y_pred):
@@ -145,6 +159,16 @@ def plot_feature_importance(clf, vectorizer, top_n=20):
     plt.show()
 
 plot_feature_importance(classifier, vectorizer)
+
+# Optional: show threshold sensitivity to address bias
+def print_threshold_metrics(threshold=0.5):
+    import numpy as np
+    preds = (y_proba >= threshold).astype(int)
+    print(f"\nThreshold = {threshold:.2f}")
+    print(classification_report(y_test, preds, target_names=["Human", "AI"]))
+
+for t in [0.3, 0.5, 0.7]:
+    print_threshold_metrics(t)
 
 # Save model for prediction
 print("Saving model...")
