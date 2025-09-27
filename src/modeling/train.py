@@ -8,13 +8,19 @@ from ..dataset import load_data, clean_text, split_data
 from ..features import preprocess_text, create_tfidf_features
 from ..plots import plot_class_distribution, plot_confusion_matrix, create_wordcloud, plot_feature_importance
 from ..config import RANDOM_STATE
+try:
+    from ..cache_manager import CacheManager
+except ImportError:
+    # Fallback for when running as script
+    from cache_manager import CacheManager
 
-def train_model(file_path=None):
+def train_model(file_path=None, cache_manager=None):
     """
     Complete training pipeline.
     
     Args:
         file_path (str): Path to the dataset CSV file. If None, uses Kaggle dataset.
+        cache_manager (CacheManager, optional): Cache manager for saving results
         
     Returns:
         tuple: (model, vectorizer, X_test, y_test, y_pred)
@@ -83,6 +89,21 @@ def train_model(file_path=None):
     
     # Plot feature importance
     plot_feature_importance(model, vectorizer)
+    
+    # Save training results to cache if cache manager is provided
+    if cache_manager is not None:
+        training_results = {
+            "accuracy": accuracy_score(y_test, y_pred),
+            "classification_report": classification_report(y_test, y_pred, output_dict=True),
+            "model_type": "LogisticRegression",
+            "random_state": RANDOM_STATE,
+            "test_size": len(y_test),
+            "train_size": len(y_train)
+        }
+        cache_manager.save_training_results(training_results)
+        
+        # Save model artifacts to cache
+        cache_manager.save_model_artifacts(model, vectorizer)
     
     return model, vectorizer, X_test, y_test, y_pred
 

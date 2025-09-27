@@ -7,6 +7,7 @@ import pandas as pd
 from wordcloud import WordCloud
 from sklearn.metrics import confusion_matrix
 import numpy as np
+from sklearn.metrics import roc_curve, auc
 
 # Set style
 plt.style.use('default')
@@ -101,6 +102,32 @@ def plot_feature_importance(clf, vectorizer, top_n=20):
     plt.title(f'Top {top_n} AI-predictive Features')
     plt.tight_layout()
     plt.show()
+
+def plot_roc_curve(y_true, y_scores, title='ROC Curve'):
+    """
+    Plot ROC curve and return AUC.
+    
+    Args:
+        y_true: True binary labels (0/1)
+        y_scores: Predicted probabilities for the positive class
+        title (str): Plot title
+    Returns:
+        float: AUC value
+    """
+    fpr, tpr, _ = roc_curve(y_true, y_scores)
+    roc_auc = auc(fpr, tpr)
+    plt.figure(figsize=(6, 6))
+    plt.plot(fpr, tpr, color='darkorange', lw=2, label=f'ROC curve (AUC = {roc_auc:.3f})')
+    plt.plot([0, 1], [0, 1], color='navy', lw=1, linestyle='--', label='Chance')
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title(title)
+    plt.legend(loc='lower right')
+    plt.tight_layout()
+    plt.show()
+    return roc_auc
     
     plt.figure(figsize=(10, 6))
     plt.barh(top_negative['feature'], top_negative['coef'], color='red')
