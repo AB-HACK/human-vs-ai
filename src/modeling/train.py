@@ -8,7 +8,11 @@ from ..dataset import load_data, clean_text, split_data
 from ..features import preprocess_text, create_tfidf_features
 from ..plots import plot_class_distribution, plot_confusion_matrix, create_wordcloud, plot_feature_importance
 from ..config import RANDOM_STATE
-from ..cache_manager import CacheManager
+try:
+    from ..cache_manager import CacheManager
+except ImportError:
+    # Fallback for when running as script
+    from cache_manager import CacheManager
 
 def train_model(file_path=None, cache_manager=None):
     """

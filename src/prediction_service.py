@@ -12,7 +12,11 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-from .cache_manager import CacheManager
+try:
+    from .cache_manager import CacheManager
+except ImportError:
+    # Fallback for when running as script
+    from cache_manager import CacheManager
 
 
 class PredictionService:

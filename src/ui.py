@@ -3,8 +3,13 @@ User interface components for the AI vs Human essay classification project.
 Separates UI logic from business logic.
 """
 from typing import Optional, List
-from .prediction_service import PredictionService
-from .cache_manager import CacheManager
+try:
+    from .prediction_service import PredictionService
+    from .cache_manager import CacheManager
+except ImportError:
+    # Fallback for when running as script
+    from prediction_service import PredictionService
+    from cache_manager import CacheManager
 
 
 class TextClassifierUI:

@@ -9,9 +9,18 @@ from pathlib import Path
 src_dir = Path(__file__).parent.parent
 sys.path.insert(0, str(src_dir))
 
-from prediction_service import PredictionService
-from ui import TextClassifierUI
-from cache_manager import CacheManager
+try:
+    from ..prediction_service import PredictionService
+    from ..ui import TextClassifierUI
+    from ..cache_manager import CacheManager
+except ImportError:
+    # Fallback for when running as script
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).parent.parent))
+    from prediction_service import PredictionService
+    from ui import TextClassifierUI
+    from cache_manager import CacheManager
 
 def get_sample_texts():
     """Get sample texts for demonstration."""

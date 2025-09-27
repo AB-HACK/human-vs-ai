@@ -8,9 +8,19 @@ from pathlib import Path
 src_dir = Path(__file__).parent / "src"
 sys.path.insert(0, str(src_dir))
 
-from prediction_service import PredictionService
-from ui import TextClassifierUI
-from cache_manager import CacheManager
+try:
+    from src.prediction_service import PredictionService
+    from src.ui import TextClassifierUI
+    from src.cache_manager import CacheManager
+except ImportError:
+    # Fallback for direct execution
+    import sys
+    from pathlib import Path
+    src_dir = Path(__file__).parent / "src"
+    sys.path.insert(0, str(src_dir))
+    from prediction_service import PredictionService
+    from ui import TextClassifierUI
+    from cache_manager import CacheManager
 import tempfile
 import os
 

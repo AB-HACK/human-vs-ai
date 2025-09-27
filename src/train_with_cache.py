@@ -8,8 +8,13 @@ from pathlib import Path
 src_dir = Path(__file__).parent
 sys.path.insert(0, str(src_dir))
 
-from modeling.train import train_model, save_model
-from cache_manager import CacheManager
+try:
+    from .modeling.train import train_model, save_model
+    from .cache_manager import CacheManager
+except ImportError:
+    # Fallback for when running as script
+    from modeling.train import train_model, save_model
+    from cache_manager import CacheManager
 
 
 def main():
