@@ -280,7 +280,7 @@ For issues and questions:
 2. Run the test suite
 3. Review the caching system documentation
 4. Open an issue with detailed error information
-5. you can find me on http://trybenode.space and 09029252005
+5. you can find me on http://trybenode.space
 
 ---
 
